@@ -1,0 +1,5 @@
+.idea/*
+constants.py
+data/
+logs/
+__pycache__/
