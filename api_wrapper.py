@@ -1,4 +1,6 @@
 import requests as r
+
+from cache import read, append
 from constants import API_KEY_DEV, API_KEY_PROD
 import logging
 
@@ -30,11 +32,18 @@ class TikTokApi:
         logging.debug(res.text)
         return res.json()
 
-    def get_user_id(self, username: str):
+    def get_user_id(self, username: str, use_cache: bool = True):
         """
         Return user_id from a TikTok username / user unique_id
         :param username: i.e. tiktok or @tiktok
+        :param use_cache: optionally read/write username -> uid key/value to local file to cache result
         :return: user_id
         """
-        response = self.__get("/user/info", {"unique_id": username})
-        return response.get("data").get("user").get("id")
+        cache_file = "data/user_id_cache.json"
+        uid = read(cache_file, username) if use_cache else None
+        if not uid:
+            response = self.__get("/user/info", {"unique_id": username})
+            uid = response.get("data").get("user").get("id")
+            if use_cache:
+                append(cache_file, {username: uid})
+        return uid
