@@ -8,16 +8,6 @@ USER_CACHE_FILE = "data/cache/user_id_cache.json"
 FOLLOWING_CACHE_FILE = "data/cache/following_cache.json"
 FOLLOWERS_CACHE_FILE = "data/cache/followers_cache.json"
 
-LOG_FILE = "data/logs/dev.log"
-
-
-def init_logging(debug: bool = True, write_file: bool = True):
-    log_level = logging.DEBUG if debug else logging.INFO
-    request_logger = logging.getLogger('urllib3')
-    request_logger.setLevel(log_level)
-    logging.basicConfig(filename=LOG_FILE if write_file else None, datefmt='%H:%M:%S', level=log_level,
-                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
-
 
 def parse_users(cache_file, users, enhance):
     mapping = {}
@@ -38,7 +28,6 @@ class TikTokApi:
     API_HOST = "tiktok-video-no-watermark2.p.rapidapi.com"
 
     def __init__(self, production: bool = False):
-        init_logging()
         logging.info("Initializing TikTok API")
         self.request_count = 0
         self.headers = {
