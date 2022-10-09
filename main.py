@@ -1,17 +1,15 @@
 from api_wrapper import TikTokApi
 import logging
 from datetime import datetime
-from constants import TIKTOK_USER
-from helper import write_csv, format_output
-
-LOG_FILE = "data/logs/prod.log"
+from constants import TIKTOK_USER, LOG_FILE, OUTPUT_FILE
+from helper import write_csv, format_output, verify
 
 
 def init_logging(debug: bool = True, write_file: bool = True):
     log_level = logging.DEBUG if debug else logging.INFO
     request_logger = logging.getLogger('urllib3')
     request_logger.setLevel(log_level)
-    logging.basicConfig(filename=LOG_FILE if write_file else None, datefmt='%H:%M:%S', level=log_level,
+    logging.basicConfig(filename=verify(LOG_FILE) if write_file else None, datefmt='%H:%M:%S', level=log_level,
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
 
 
@@ -31,7 +29,7 @@ def tiktok_followers(username: str, use_cache: bool = True, prod: bool = False):
     # sort, format and output followers CSV
     output = format_output(followers, following)
     suffix = datetime.today().strftime('%Y%m%d')
-    write_csv(f'./data/output/{username}_{suffix}.csv', output)
+    write_csv(verify(OUTPUT_FILE.format(username, suffix)), output)
 
 
 def main():

@@ -1,12 +1,8 @@
 import time
 import requests as r
 from helper import read, append, read_file
-from constants import API_KEY_DEV, API_KEY_PROD
+from constants import API_KEY_DEV, API_KEY_PROD, FOLLOWERS_CACHE_FILE, FOLLOWING_CACHE_FILE, USER_CACHE_FILE
 import logging
-
-USER_CACHE_FILE = "data/cache/user_id_cache.json"
-FOLLOWING_CACHE_FILE = "data/cache/following_cache.json"
-FOLLOWERS_CACHE_FILE = "data/cache/followers_cache.json"
 
 
 def parse_users(cache_file, users, enhance):
